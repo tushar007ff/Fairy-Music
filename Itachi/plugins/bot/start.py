@@ -9,7 +9,7 @@ import config
 from Itachi import app
 from Itachi.misc import _boot_
 from Itachi.plugins.sudo.sudoers import sudoers_list
-from Itachi.utils.database import (
+from Rudra.utils.database import (
     add_served_chat,
     add_served_user,
     blacklisted_chats,
@@ -22,6 +22,7 @@ from Itachi.utils.formatters import get_readable_time
 from Itachi.utils.inline import help_pannel, private_panel, start_panel
 from config import BANNED_USERS
 from strings import get_string
+
 
 
 Hina_PICS = [
@@ -102,12 +103,9 @@ async def start_pm(client, message: Message, _):
                 )
     else:
         out = private_panel(_)
-        served_chats = len(await get_served_chats())
-        served_users = len(await get_served_users())
-        UP, CPU, RAM, DISK = await bot_sys_stats()
         await message.reply_photo(
             random.choice(Hina_PICS),
-            caption=_["start_2"].format(message.from_user.mention, app.mention, UP, DISK, CPU, RAM,served_users,served_chats),
+            caption=_["start_2"].format(message.from_user.mention, app.mention),
             reply_markup=InlineKeyboardMarkup(out),
         )
         if await is_on_off(2):
@@ -117,7 +115,7 @@ async def start_pm(client, message: Message, _):
             )
 
 
-@app.on_message(filters.command(["gjhff"]) & filters.group & ~BANNED_USERS)
+@app.on_message(filters.command(["start"]) & filters.group & ~BANNED_USERS)
 @LanguageStart
 async def start_gp(client, message: Message, _):
     out = start_panel(_)
@@ -160,7 +158,7 @@ async def welcome(client, message: Message):
                 await message.reply_photo(
                     random.choice(Hina_PICS),
                     caption=_["start_3"].format(
-                        message.from_user.mention,
+                        message.from_user.first_name,
                         app.mention,
                         message.chat.title,
                         app.mention,
